@@ -1,0 +1,96 @@
+#!/data/data/com.termux/files/usr/bin/sh
+
+ACMD="$1"
+ARGV="$@"
+#
+# ----------------------------
+# |START CONFIGURATION SECTION|
+# ----------------------------
+# 
+# the path to your httpd binary, including options if necessary
+HTTPD='/data/data/com.termux/files/usr/bin/httpd'
+#
+# pick up any necessary environment variables
+if test -f /data/data/com.termux/files/usr/bin/envvars; then
+  . /data/data/com.termux/files/usr/bin/envvars
+fi
+[ -f $PREFIX/var/run/apache2/httpd.pid ] && rm $PREFIX/var/run/apache2/httpd.pid
+if [ ! -d /sdcard/htdocs ]
+then
+    mkdir /sdcard/htdocs
+fi
+#
+# a command that outputs a formatted text version of the HTML at the
+# url given on the command line.  Designed for lynx, however other
+# programs may work.  
+LYNX="lynx -dump"
+#
+# the URL to your server's mod_status status page.  If you do not
+# have one, then status and fullstatus will not work.
+STATUSURL="http://localhost:8080/server-status"
+#
+# Set this variable to a command that increases the maximum
+# number of file descriptors allowed per child process. This is
+# critical for configurations that use many file descriptors,
+# such as mass vhosting, or a multithreaded server.
+ULIMIT_MAX_FILES="ulimit -S -n `ulimit -H -n`"
+
+# -----------------------------
+# |END CONFIGURATION SECTION| #
+# -----------------------------
+
+# Set the maximum number of file descriptors allowed per child process.
+if [ "x$ULIMIT_MAX_FILES" != "x" ] ; then
+    $ULIMIT_MAX_FILES
+fi
+
+ERROR=0
+if [ "x$ARGV" = "x" ] ; then 
+    ARGV="-h"
+fi
+
+case $ACMD in
+start|stop|restart|graceful|graceful-stop)
+    $HTTPD -k $ARGV
+    ERROR=$?
+    ;;
+startssl|sslstart|start-SSL)
+    echo The startssl option is no longer supported.
+    echo Please edit httpd.conf to include the SSL configuration settings
+    echo and then use "webserver start".
+    ERROR=2
+    ;;
+configtest)
+    $HTTPD -t
+    ERROR=$?
+    ;;
+status)
+    $LYNX $STATUSURL | awk ' /process$/ { print; exit } { print } '
+    ;;
+fullstatus)
+    $LYNX $STATUSURL
+    ;;
+*)
+    $HTTPD "$@"
+    ERROR=$?
+esac
+
+if [ $ERROR -eq 0 ]
+then
+    mysqld_safe &
+    sleep 3
+    clear
+    echo " Membuka browser localhost... "
+    sleep 2
+    termux-open-url http://localhost:8080/
+else
+    mysqld_safe &
+    sleep 3
+    clear
+    echo " Membuka browser localhost... "
+    sleep 2
+    termux-open-url http://localhost:8080/
+fi
+
+
+exit $ERROR
