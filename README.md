@@ -9,9 +9,9 @@ Oleh Hadi Khoirudin, S.Kom.
 pkg install git -y && cd ~/ && git clone https://github.com/programmer-indo-team/termux-web-server && cd ~/termux-web-server && chmod +x setup && bash setup && cd ~/
 ```
 
-2. Setelah Termux membuka browser secara otomatis, maka silahkan coba login ke http://localhost:8080/phpmyadmin dengan user : root dan passwordnya dikosongkan saja.
+2. Setelah Termux membuka browser secara otomatis, maka silahkan coba Buka http://localhost:8080.
 
-3. Jika dapat masuk ke dalam tampilan database MySQL maka proses instalasi sudah selesai.
+3. Jika dapat masuk ke dalam tampilan dan tidak ada error maka proses instalasi sudah selesai.
 
 ## Cara Menjalankannya : 
 1. Silahkan buka aplikasi Termux, lalu kemudian jalankan perintah ini :
