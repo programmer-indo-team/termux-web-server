@@ -1,3 +1,6 @@
+# Yang punya repo gay!
+
+
 Setup instalasi Web Server Android dengan menggunakan aplikasi Termux yang meliputi paket instalasi PHP, Apache2, MariaDB /MySQL, Composer, PHPMyAdmin, dan mc File Explorer.
 
 Oleh Hadi Khoirudin, S.Kom.
